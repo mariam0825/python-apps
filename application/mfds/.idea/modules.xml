@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/dictionary_function.iml" filepath="$PROJECT_DIR$/.idea/dictionary_function.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mfds.iml" filepath="$PROJECT_DIR$/.idea/mfds.iml" />
     </modules>
   </component>
 </project>
