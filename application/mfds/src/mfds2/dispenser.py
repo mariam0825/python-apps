@@ -1,15 +1,33 @@
-
 from src.mfds2.fuel import Fuel
 class Dispenser:
-    def __init__(self):
-        self.fuel = {}
-        self.transactions = []
+    def __init__(self ):
+        with open("fuels.txt", 'a+') as fuels_file_Object:
+            fuels_file_Object.seek(0)
+            available_fuels = fuels_file_Object.readlines()
+
+        self.fuel = {fuel.get_name(): fuel for fuel in self.populate_fuels(available_fuels)}
+
+    @staticmethod
+    def populate_fuels(available_fuels):
+        populated_fuel = []
+
+        for fuel in available_fuels:
+            fuel_name, price, quantity = fuel.strip().split("|")
+            fuel = Fuel(fuel_name.strip(), float(price.strip()), float(quantity.strip()))
+            populated_fuel.append(fuel)
+
+        return populated_fuel
 
     def add_fuel(self, fuel_name, price, quantity):
         if fuel_name in self.fuel:
             return False
+
         fuel = Fuel(fuel_name, price, quantity)
         self.fuel[fuel_name] = fuel
+
+        with open("fuels.txt", "a+") as fuels_file:
+            fuels_file.write(f"{fuel_name}|{price}|{quantity}\n")
+
         return True
 
     def get_price_per_litre(self, fuel_name):
@@ -25,7 +43,7 @@ class Dispenser:
 
     def clear(self):
         self.fuel.clear()
-        self.transactions.clear()
+        self.transactions = []
 
     def update_price(self, fuel_name, new_price):
         if fuel_name not in self.fuel or new_price <= 0:
@@ -52,7 +70,9 @@ class Dispenser:
         if litres > fuel.get_quantity():
             return False
         fuel.sell(litres)
-        self.transactions.append({'fuel_name': fuel_name,'litres': litres, 'total_amount': amount})
+        with open("transactions.txt", 'a+') as transactions_file_Object:
+            transactions_file_Object.write(f"fuel_name :{fuel_name}\t |\tlitres : {litres}\t|\ttotal_amount:{amount}\n ")
+
         return litres
 
     def dispense_with_quantity(self, fuel_name, litres):
@@ -63,7 +83,8 @@ class Dispenser:
             return False
         total_amount = litres * fuel.get_amount_per_litre()
         fuel.sell(litres)
-        self.transactions.append({'fuel_name': fuel_name,'litres': litres,'total_amount': amount})
+        with open("transactions.txt", 'a+') as transactions_file_Object:
+            transactions_file_Object.write(f"fuel_name :{fuel_name}\t |\tlitres : {litres}\t|\ttotal_amount:{total_amount}\n ")
         return total_amount
 
     def dispense_fuel(self, fuel_name, amount, buy_with):
@@ -72,8 +93,9 @@ class Dispenser:
         elif buy_with == "quantity":
             return self.dispense_with_quantity(fuel_name, amount)
         return False
-
+    @staticmethod
     def show_all_transactions(self):
-        return self.transactions
-
+        with open("transactions.txt", 'a+') as transactions_file_Object:
+            transactions_file_Object.seek(0)
+            return transactions_file_Object.readlines()
 

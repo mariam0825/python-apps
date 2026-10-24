@@ -1,7 +1,6 @@
-from mfds2 import attendant
 
-from mfds2.dispenser import Dispenser
 from mfds2.attendant import Attendant
+from mfds2.dispenser import Dispenser
 
 dispenser = Dispenser()
 attendant = Attendant("Mariam", dispenser)
